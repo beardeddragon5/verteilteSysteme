@@ -11,7 +11,7 @@ int deletew(CLIENT* handle, char* word);
 
 int lookupw(CLIENT* handle, char* word);
 
-int updatew(CLIENT* handle, upd u);
+int updatew(CLIENT* handle, char* word1, char* word2);
 
 int countw(CLIENT* handle);
 
