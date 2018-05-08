@@ -7,6 +7,11 @@
 #define STRVALID(a) (strlen(a) > 0)
 
 
+void failed(char* func) {
+  fprintf(stderr, "%s failed\n", func);
+  exit(1);
+}
+
 int main(int argc, char** argv) {
   CLIENT* client = NULL;
   bool_t done = FALSE;
@@ -25,8 +30,6 @@ int main(int argc, char** argv) {
     char arg2[MAXWORD+1];
     int argCount;
 
-
-
     printf("> ");
     fgets(command, sizeof(command), stdin);
     argCount = sscanf(command, "%s %s %s", cmd, arg1, arg2);
@@ -35,22 +38,19 @@ int main(int argc, char** argv) {
       if (argCount != 1) {
         fprintf(stderr, "usage: init \ninitalize database\n");
       } else if (!initw(client)) {
-        fprintf(stderr, "init failed\n");
-        exit(1);
+        failed("init");
       }
     } else if (STREQ(cmd, "insert")) {
       if (argCount != 2) {
         fprintf(stderr, "usage: insert <value>\ninsert value into database\n");
       } else if (!insertw(client, arg1)) {
-        fprintf(stderr, "insert failed\n");
-        exit(1);
+        failed("insert");
       }
     } else if (STREQ(cmd, "del")) {
       if (argCount != 2) {
         fprintf(stderr, "usage: del <value>\ndelete value from database\n");
       } else if (!deletew(client, arg1)) {
-        fprintf(stderr, "deletion failed\n");
-        exit(1);
+        failed("del");
       }
     } else if (STREQ(cmd, "exist")) {
       if (argCount != 2) {
@@ -64,8 +64,7 @@ int main(int argc, char** argv) {
       if (argCount != 2) {
         fprintf(stderr, "usage: update <value> <value>\nupdate first value with secound value\n");
       } else if (!updatew(client, arg1, arg2)) {
-        fprintf(stderr, "update failed\n");
-        exit(1);
+        failed("update");
       }
     } else if (STREQ(cmd, "count")) {
       if (argCount != 1) {
@@ -73,8 +72,7 @@ int main(int argc, char** argv) {
       } else {
         int count = countw(client);
         if ( count == -1 ) {
-          fprintf(stderr, "count failed\n");
-          exit(1);
+          failed("count");
         }
         printf("%d\n", count);
       }
@@ -84,8 +82,7 @@ int main(int argc, char** argv) {
       } else {
         char* line = selectw(client);
         if ( line == NULL ) {
-          fprintf(stderr, "select1 failed\n");
-          exit(1);
+          failed("select");
         }
         printf("%s\n", line);
       }

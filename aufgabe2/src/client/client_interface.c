@@ -9,24 +9,22 @@
     return CHECK(ret);                      \
   }
 
+#define WRAPPER_VOID(func)                  \
+  int func(CLIENT* handle) {                \
+    int* ret = func ## _1(0, handle);       \
+    return CHECK(ret);                      \
+  }
+
+WRAPPER_VOID(initw)
 WRAPPER_STRING(insertw)
 WRAPPER_STRING(deletew)
 WRAPPER_STRING(lookupw)
-
-int initw(CLIENT* handle) {
-  int* ret = initw_1(NULL, handle);
-  return CHECK(ret);
-}
+WRAPPER_VOID(countw)
 
 int updatew(CLIENT* handle, char* word1, char* word2) {
   upd u = { word1, word2 };
   int* ret = updatew_1(&u, handle);
   return CHECK(ret);
-}
-
-int countw(CLIENT* handle) {
-  int* ret = countw_1(NULL, handle);
-  return ret == NULL ? -1 : *ret;
 }
 
 char* selectw(CLIENT* handle) {

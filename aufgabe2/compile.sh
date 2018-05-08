@@ -26,4 +26,5 @@ mkdir -p ../bin
 cc -o ../bin/client client/*.o rdbase/rdbase_clnt.o rdbase/rdbase_xdr.o
 cc -o ../bin/server server/*.o rdbase/rdbase_svc.o rdbase/rdbase_xdr.o
 
+rm client/*.o rdbase/*.o server/*.o
 cd ..
