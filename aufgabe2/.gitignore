@@ -4,3 +4,4 @@ rdbase_svc.c
 rdbase_xdr.c
 rdbase.h
 Beispiel/bin
+bin
