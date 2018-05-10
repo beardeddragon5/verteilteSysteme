@@ -5,7 +5,7 @@ import java.rmi.*;
 
 public interface BankService extends Remote {
 
-  public static final String REGISTRY_NAME = "bankservice";
+  public static final String REGISTRY_NAME = "bankservice_%d";
 
   public BankAccount register(String name, String password) throws BankException, RemoteException;
 

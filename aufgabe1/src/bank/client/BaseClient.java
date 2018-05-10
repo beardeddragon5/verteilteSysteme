@@ -11,9 +11,9 @@ public abstract class BaseClient {
   protected final Registry registry;
   protected final BankService service;
 
-  public BaseClient(String host, int port) throws RemoteException, NotBoundException, AccessException {
+  public BaseClient(String host, int port, int bankID) throws RemoteException, NotBoundException, AccessException {
     this.registry = LocateRegistry.getRegistry(host, port);
-    this.service = (BankService) this.registry.lookup(BankService.REGISTRY_NAME);
+    this.service = (BankService) this.registry.lookup(String.format(BankService.REGISTRY_NAME, bankID));
   }
 
 }

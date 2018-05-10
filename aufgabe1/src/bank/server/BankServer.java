@@ -35,21 +35,24 @@ public class BankServer {
   public static void main (String args[]) throws IOException {
     try {
       final Registry reg = LocateRegistry.createRegistry(Integer.parseInt(args[0]));
-      final BankService service = createBank(args[1]);
-      reg.rebind(BankService.REGISTRY_NAME, service);
 
       final Thread mainThread = Thread.currentThread();
-      Runtime.getRuntime().addShutdownHook(new Thread() {
-        public void run() {
-          writeBank(args[1], service);
-          try {
-            mainThread.join();
-          } catch(InterruptedException e) {
-            e.printStackTrace();
-          }
-        }
-      });
+      for ( int i = 1; i < args.length; i++ ) {
+        final int bankID = i;
+        final BankService service = createBank(args[bankID]);
+        reg.rebind(String.format(BankService.REGISTRY_NAME, bankID), service);
 
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+          public void run() {
+            writeBank(args[bankID], service);
+            try {
+              mainThread.join();
+            } catch(InterruptedException e) {
+              e.printStackTrace();
+            }
+          }
+        });
+      }
       System.out.println("Bank ready");
     } catch( RemoteException e ) {
       e.printStackTrace();

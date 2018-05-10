@@ -11,19 +11,19 @@ public class CustomerClient extends BaseClient {
 
   public static void main(String[] args) throws IOException {
     try {
-      final CustomerClient client = new CustomerClient(args[0], Integer.parseInt(args[1]));
+      final CustomerClient client = new CustomerClient(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]));
       client.init();
     } catch( RemoteException | NotBoundException e ) {
       System.out.println("Can't connect to bank: " + e.getMessage());
     } catch( ArrayIndexOutOfBoundsException e  ) {
-      System.out.println("java -jar client.jar <host> <port>");
+      System.out.println("java -jar client.jar <host> <port> <bankID>");
     }
   }
 
   private final Scanner scanner = new Scanner(System.in);
 
-  public CustomerClient(String host, int port) throws RemoteException, NotBoundException, AccessException {
-    super(host, port);
+  public CustomerClient(String host, int port, int bankID) throws RemoteException, NotBoundException, AccessException {
+    super(host, port, bankID);
   }
 
   public void init() throws IOException, RemoteException {

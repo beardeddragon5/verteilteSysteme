@@ -12,17 +12,17 @@ public class TaxOfficeClient extends BaseClient {
 
   public static void main(String[] args) {
     try {
-      final TaxOfficeClient client = new TaxOfficeClient(args[0], Integer.parseInt(args[1]));
-      client.init(Arrays.copyOfRange(args, 2, args.length));
+      final TaxOfficeClient client = new TaxOfficeClient(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+      client.init(Arrays.copyOfRange(args, 3, args.length));
     } catch( RemoteException | NotBoundException e ) {
       System.out.println("Can't connect to bank: " + e.getMessage());
     } catch( ArrayIndexOutOfBoundsException e  ) {
-      System.out.println("java -jar client.jar <host> <port> {numbers|amount} <name>");
+      System.out.println("java -jar client.jar <host> <port> <bankid> {numbers|amount} <name>");
     }
   }
 
-  public TaxOfficeClient(String host, int port) throws RemoteException, NotBoundException, AccessException {
-    super(host, port);
+  public TaxOfficeClient(String host, int port, int bankID) throws RemoteException, NotBoundException, AccessException {
+    super(host, port, bankID);
   }
 
   public void init(String[] args) throws ArrayIndexOutOfBoundsException, RemoteException {
