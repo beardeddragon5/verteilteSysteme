@@ -1,0 +1,37 @@
+#!/bin/bash
+
+set -e
+
+rpcgen rdbase.x
+
+# Common
+mkdir -p bin
+cc -c rdbase_xdr.c
+mv rdbase_svc.c server/
+mv rdbase_clnt.c client/
+cp rdbase.h server/
+mv rdbase.h client/
+
+
+# Client
+cd client
+cc -c *.c
+cd ..
+
+cc -o bin/rdbase client/*.o rdbase_xdr.o
+
+rm client/*.o
+
+# Server
+cd server
+cc -c *.c
+cd ..
+
+cc -o bin/rdbased server/*.o rdbase_xdr.o
+
+rm server/*.o
+rm *.o
+
+#rdbased  (im Hintergrund mit & oder in einer eigenen Shell)
+
+#rdbase (in einer eigenen Shell)
