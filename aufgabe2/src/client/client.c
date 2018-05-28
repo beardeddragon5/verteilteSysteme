@@ -1,5 +1,7 @@
 
 #include "client.h"
+#include <string.h>
+#include <stdlib.h>
 
 #define RMACHINE "localhost"
 
@@ -78,7 +80,7 @@ int main(int argc, char** argv) {
       }
     } else if (STREQ(cmd, "select")) {
       if (argCount != 1) {
-        fprintf(stderr, "usage: select1\nreturns line with all values\n");
+        fprintf(stderr, "usage: select\nreturns line with all values\n");
       } else {
         char* line = selectw(client);
         if ( line == NULL ) {

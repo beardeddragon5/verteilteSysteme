@@ -1,5 +1,7 @@
 
 #include "server.h"
+#include <stdlib.h>
+#include <string.h>
 
 char dict[DICTSIZ] [MAXWORD+1];
 int  nwords = 0;
