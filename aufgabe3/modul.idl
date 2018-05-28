@@ -1,0 +1,60 @@
+module Promileben {
+
+  enum Papiere {
+    Personalausweis,
+    Reisepass
+  };
+
+  enum Grund {
+    NichtWohnhaft,
+    Steuern,
+    Straffaellig
+  };
+
+  exception PromiException {
+    string grund;
+  };
+
+  exception PromiVetoException{
+    Grund grund;
+  };
+
+  struct Wohnort {
+    string name;
+    string staat;
+    short datum;
+  };
+
+  struct Name {
+    string surname;
+    sequence<string> vornamen;
+  };
+
+  typedef sequence<Wohnort> Wohnorte;
+
+  interface Mensch {
+    readonly attribute Name name;
+    attribute Papiere papiere;
+  };
+
+  interface Reporter : Mensch { };
+
+  interface Promi : Mensch {
+    attribute Wohnorte wohnorte;
+
+    void zuziehen(in Wohnort wohnort) raises (PromiException);
+    void wegziehen(in Wohnort wohnort) raises (PromiVetoException);
+
+    string interviewRueckgabe (in Reporter r);
+    void interviewAusgabe(in Reporter r, out string dokument);
+  };
+
+  interface Meldeamt {
+    Promi searchName(in Name name);
+    Promi searchPapiere(in Papiere papiere);
+
+    void zuziehenlassen(in Promi p);
+    void wegziehenlassen(in Promi p);
+  };
+
+};
