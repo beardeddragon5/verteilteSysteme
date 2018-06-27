@@ -1,5 +1,11 @@
 'use strict';
 
+const processes = [];
+const processCount = process.env.PROCESSES || 10;
+const processToKill = process.env.KILL || 9;
+const processToElect = process.env.ELECT || 0;
+const timeout = process.env.TIMEOUT || 100;
+
 const EventEmitter = require('events');
 
 class Process extends EventEmitter {
@@ -15,11 +21,6 @@ class Process extends EventEmitter {
   }
 }
 
-const processes = [];
-const processCount = process.env.PROCESSES || 10;
-const processToKill = process.env.KILL || 9;
-const processToElect = process.env.ELECT || 0;
-
 for (let i = 0; i < processCount; i++) {
   processes.push(new Process(i));
 }
@@ -29,8 +30,8 @@ function appendListener(p) {
     if (!p.active) return;
 
     if (sender) {
-      sender.emit('ok', p);
       console.log("OK-Nachricht von Prozess %d an Prozess %d gesendet", p.pid, sender.pid);
+      sender.emit('ok', p);
     }
 
     let failedRequest = 0;
@@ -40,16 +41,18 @@ function appendListener(p) {
       totalRequests++;
       p[`elect${processes[j].pid}`] = setTimeout(() => {
         failedRequest++;
-        if (failedRequest === totalRequests) {
+        if (failedRequest === totalRequests && !p.coord) {
+          p.coord = true;
           processes.forEach(pr => {
-            pr.emit('coord', p);
             console.log("COORD-Nachricht von Prozess %d an Prozess %d gesendet", p.pid, pr.pid);
+            pr.emit('coord', p);
           });
+          setTimeout(() => {p.coord = false;}, timeout);
         }
-      }, 100);
+      }, timeout);
 
-      processes[j].emit('elect', p);
       console.log("ELECT-Nachricht von Prozess %d an Prozess %d gesendet", p.pid, processes[j].pid);
+      processes[j].emit('elect', p);
     }
   });
 
