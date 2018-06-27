@@ -1,3 +1,4 @@
 build
 *.jar
 *.o
+/aufgabe4/Corba/nbproject/private/

@@ -1,0 +1,21 @@
+
+module Verein {
+    enum Type { Sport, Sozial, Culture };
+
+    interface Vereinsmitglied {
+        
+        struct verein {
+            string vname; 
+            short vbeitrag;
+            Type vtype;
+            string city;
+        };
+
+        typedef sequence<verein> VereinSeq;
+        
+
+        readonly attribute string mname;
+        readonly attribute VereinSeq mvereine;
+        short erhoeheBeitrag (in string verein, in short erhoehung);
+    }; 
+};
